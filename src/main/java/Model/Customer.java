@@ -17,6 +17,9 @@ public class Customer {
     private String Password;
     private int Age;
 
+    public Customer() {
+    }
+
     public Customer(int ID, String Name, String Address, String PhoneNumber, String Email, String Password, int Age) {
         this.ID = ID;
         this.Name = Name;
@@ -26,6 +29,7 @@ public class Customer {
         this.Password = Password;
         this.Age = Age;
     }
+
 
     public int getID() {
         return ID;

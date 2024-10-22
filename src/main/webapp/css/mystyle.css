@@ -35,7 +35,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 }
 
 .login{
-      background-color: #080710;
+    background-color: #080710;
 }
 .background{
     width: 430px;
@@ -177,7 +177,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     margin-right: 4px;
 }
 
-.back{  
+.back{
     font-size: 15px;
     width: 30%;
     background-color: #ffffff;
@@ -186,10 +186,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     font-size: 18px;
     font-weight: 600;
     border-radius: 5px;
-    cursor: pointer;  
+    cursor: pointer;
     margin: auto;
     margin-top: 15px;
-   
+
 
 }
 .back button{
@@ -197,5 +197,5 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     margin-top: 0px;
     padding: 0px;
     font-size: 12px;
-    
+
 }
