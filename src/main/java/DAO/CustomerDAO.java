@@ -20,13 +20,13 @@ import java.util.logging.Logger;
  */
 public class CustomerDAO extends DBContext {
 
-//    public CustomerDAO() {
-//        super();
-//    }
-
+    public CustomerDAO() {
+        super();
+    }
+    
     
     public List<Customer> GetAll() {
-        List<Customer> list = new ArrayList<>();
+        List<Customer> list =  new ArrayList<>();
         String query = "Select  *  from Customers";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -36,10 +36,10 @@ public class CustomerDAO extends DBContext {
                         rs.getInt("Customer_ID"),
                         rs.getString("Customer_Name"),
                         rs.getString("Address"),
-                         rs.getString("PhoneNumber"),
+                        rs.getString("PhoneNumber"),
                         rs.getString("Email"),
                         rs.getString("Password"),
-                        rs.getInt("Age")
+                        rs.getDate("Age")
                 );
                 list.add(cus);
             }
@@ -66,7 +66,7 @@ public class CustomerDAO extends DBContext {
             pstmt.setString(4, cus.getPhoneNumber());
             pstmt.setString(5, cus.getEmail());
             pstmt.setString(6, cus.getPassword());
-            pstmt.setInt(7, cus.getAge());
+            pstmt.setDate(7, cus.getAge());
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -90,7 +90,7 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getInt("Age"));
+                cus.setAge(rs.getDate("Age"));
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -104,7 +104,7 @@ public class CustomerDAO extends DBContext {
                 + "PhoneNumber=?,"
                 + "Email=?,"
                 + "Password=?,"
-                + "Age"
+                + "Age=?"
                 + " WHERE Customer_ID = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -114,12 +114,202 @@ public class CustomerDAO extends DBContext {
             pstmt.setString(3, cus.getPhoneNumber());
             pstmt.setString(4, cus.getEmail());
             pstmt.setString(5, cus.getPassword());
-            pstmt.setInt(6, cus.getAge());
+            pstmt.setDate(6, cus.getAge());
             pstmt.setInt(7, cus.getID());
             pstmt.executeUpdate();
         } catch (Exception e) {
             Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+    }
+
+    public void DeleteCustomer(int id) {
+        String query = "Delete Customer WHERE Customer_ID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
+    public List<Customer> SearchUserByName(String name) {
+         List<Customer> list = new ArrayList<>();
+        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? ";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, "%"+name+"%");
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<Customer> SearchUserByAddress(String Address) {
+         List<Customer> list = new ArrayList<>();
+        
+        String query = "SELECT * FROM Customers WHERE Address LIKE ? ";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, "%"+Address+"%");
+            ResultSet rs = pstmt.executeQuery();
+                 while(rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<Customer> SearchUserByAge(int Age) {
+         List<Customer> list = new ArrayList<>();
+
+        String query = "SELECT * FROM Customers WHERE Age = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, Age);
+            ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<Customer> SearchUserByNameAndAddress(String name, String address) {
+         List<Customer> list = new ArrayList<>();
+   
+        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Address LIKE ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1,"%"+ name+"%");
+            pstmt.setString(2, "%"+address+"%");
+            ResultSet rs = pstmt.executeQuery();
+                 while(rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<Customer>SearchUserByNameAndAge(String name, int age) {
+         List<Customer> list = new ArrayList<>();
+        
+        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Age = ? '";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1,"%"+ name+"%");
+            pstmt.setInt(2, age);
+            ResultSet rs = pstmt.executeQuery();
+          while(rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<Customer> SearchUserByAddressAndAge(String address, int age) {
+         List<Customer> list = new ArrayList<>();
+       
+        String query = "SELECT * FROM Customers WHERE Address LIKE ? AND Age = ? '";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1,"%"+ address+"%");
+            pstmt.setInt(2, age);
+            ResultSet rs = pstmt.executeQuery();
+                  while(rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<Customer> SearchUser(String name, String address, int age) {
+         List<Customer> list = new ArrayList<>();
+       
+        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Address LIKE ? AND Age = ? '";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, "%"+name+"%");
+            pstmt.setString(2,"%"+ address+"%");
+            pstmt.setInt(3, age);
+            ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
     }
 
     public boolean VerifyAccount(String name, String pass) {
@@ -132,7 +322,7 @@ public class CustomerDAO extends DBContext {
             ps.setString(2, pass);
             ResultSet rs = ps.executeQuery();
 //            if (rs.next()) {
-                status = rs.next();
+            status = rs.next();
 //                     cus.setID(rs.getInt("Customer_ID"));
 //                cus.setName(rs.getString("Customer_Name"));
 //                cus.setAddress(rs.getString("Address"));
@@ -147,4 +337,5 @@ public class CustomerDAO extends DBContext {
         }
         return status;
     }
+
 }

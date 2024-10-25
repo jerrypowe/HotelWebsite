@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
-
+import java.sql.Date;
 /**
  *
  * @author HP
@@ -15,12 +15,12 @@ public class Customer {
     private String PhoneNumber;
     private  String Email;
     private String Password;
-    private int Age;
+     private Date Age;
 
     public Customer() {
     }
 
-    public Customer(int ID, String Name, String Address, String PhoneNumber, String Email, String Password, int Age) {
+    public Customer(int ID, String Name, String Address, String PhoneNumber, String Email, String Password, Date Age) {
         this.ID = ID;
         this.Name = Name;
         this.Address = Address;
@@ -79,12 +79,15 @@ public class Customer {
         this.Password = Password;
     }
 
-    public int getAge() {
+    public Date getAge() {
         return Age;
     }
 
-    public void setAge(int Age) {
+    public void setAge(Date Age) {
         this.Age = Age;
+    }
+       public static boolean isEmpty(Customer cus) {
+        return (cus.getID()<0)  &&  cus.getName().isEmpty();
     }
     
 }

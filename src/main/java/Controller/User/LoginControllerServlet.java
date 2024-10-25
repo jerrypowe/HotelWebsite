@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package Controller.User;
 
 import DAO.CustomerDAO;
 import Model.Customer;
@@ -74,13 +74,19 @@ public class LoginControllerServlet extends HttpServlet {
         CustomerDAO DAO = new CustomerDAO();
          
          if (DAO.VerifyAccount(u, p)) {
-//             if(cus.getID() == 0){
-//              response.sendRedirect(request.getContextPath() + "/Read");  
-//             }
-            Cookie c_user = new Cookie("username", u);
+             if(u.contains("hotel@admin.com")){
+              
+               Cookie c_user = new Cookie("username", u);
             c_user.setMaxAge(60*60*24*3); // 3 days
             response.addCookie(c_user);
             response.sendRedirect(request.getContextPath() + "/Read");  
+             }else{
+                  Cookie c_user = new Cookie("username", u);
+            c_user.setMaxAge(60*60*24*3); // 3 days
+            response.addCookie(c_user);
+             response.sendRedirect("index.jsp");
+             }
+ 
         } else {
             request.setAttribute("error", "Username or Password invalid!");
 //            request.getRequestDispatcher(  request.getContextPath() + "/").forward(request, response);    

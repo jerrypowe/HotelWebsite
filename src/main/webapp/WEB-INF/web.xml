@@ -8,6 +8,18 @@
         <servlet-name>ReadControllerServlet</servlet-name>
         <servlet-class>Controller.ReadControllerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchControllerServlet</servlet-name>
+        <servlet-class>Controller.SearchControllerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RoomManageServlet</servlet-name>
+        <servlet-class>Controller.Room.RoomManageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateRoomServlet</servlet-name>
+        <servlet-class>Controller.Room.UpdateRoomServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginControllerServlet</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -15,6 +27,18 @@
     <servlet-mapping>
         <servlet-name>ReadControllerServlet</servlet-name>
         <url-pattern>/Read</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchControllerServlet</servlet-name>
+        <url-pattern>/Search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RoomManageServlet</servlet-name>
+        <url-pattern>/RoomManageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateRoomServlet</servlet-name>
+        <url-pattern>/UpdateRoom</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

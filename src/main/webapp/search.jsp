@@ -1,6 +1,6 @@
 <%-- 
-    Document   : read
-    Created on : Oct 22, 2024, 11:39:40 PM
+    Document   : search
+    Created on : Oct 24, 2024, 10:30:58 PM
     Author     : HP
 --%>
 
@@ -11,10 +11,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <script type="text/javascript">
-//            document.cookie = "1P_JAR=akjdsbJKHdjhbk";
-//            document.cookie = "CONSENT=YES+IN.en+20170903-09-0";
-
+        <script>
+            
             function displayCookies() {
 
                 let displayCookies = document.getElementById("display");
@@ -37,16 +35,26 @@
             function redirectToJSP(nameData) {
                 window.location.href = nameData;
             }
-           
+
         </script>
     </head>
     <body>
         <h1>INFORMATION OF CUSTOMER</h1>
         <button  onclick=" redirectToJSP('index.jsp'); deleteCookies()">LOGOUT</button>
-         <button  onclick=" redirectToJSP('search.jsp')">Search</button>
-         <button onclick="redirectToJSP('/RoomManageServlet')">Room Mange</button>
+        <button  onclick=" redirectToJSP('/Read')">READ</button>
+        <button  onclick=" redirectToJSP('/RoomManageServlet')">Room Manage</button>
+  
+                <br></br>
+                <form action="Search" method="POST">
+                    <input type="text" name="name" id="name" placeholder="Search Name" value="" />
+                    <input type="text" name="address" id="address" placeholder="Search Adress" value="" />
+                    <input type="text" name="age"id="age" placeholder="Search Age" value="" />
+                    <input type="submit" value="Search" />
+                </form>
         <br></br>
-
+        <c:if test="${not empty message}">
+            <p>${message}</p>
+        </c:if>
         <table border="1" cellpadding="0" cellspacing="0">
 
 
@@ -57,11 +65,11 @@
                 <th>PhoneNumber</th>
                 <th>Email</th>
                 <th>Password</th>
-                <th>Date of Birth</th>
-           
+                <th>Age</th>
+
             </tr>
 
-            <c:forEach items="${dataread}" var="cus">
+            <c:forEach items="${data}" var="cus">
                 <tr>
                     <td>${cus.ID}</td>
                     <td>${cus.name}</td>
@@ -70,9 +78,10 @@
                     <td>${cus.email}</td>
                     <td>${cus.password}</td>
                     <td>${cus.age}</td>
-                   
+
                 </tr>
             </c:forEach>
         </table>
+
     </body>
 </html>
