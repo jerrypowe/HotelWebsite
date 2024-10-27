@@ -4,23 +4,30 @@
  */
 package Controller.Room;
 
+import DAO.CustomerDAO;
+import DAO.ReservationDAO;
 import DAO.RoomDAO;
+import DAO.ServiceDAO;
+import Model.Customer;
+import Model.Reservation;
+import Model.ReservationHasService;
+import Model.Room;
 import Model.Room_manage;
+import Model.Service;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author HP
  */
-public class RoomManageServlet extends HttpServlet {
+public class readBookedRoomServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +46,10 @@ public class RoomManageServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RoomManageServlet</title>");
+            out.println("<title>Servlet readBookedRoomServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RoomManageServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet readBookedRoomServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,41 +68,25 @@ public class RoomManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RoomDAO DAO = new RoomDAO();
-        List<Room_manage> list = DAO.GetAll();
+        ReservationDAO reservationDAO = new ReservationDAO();
+        List<Room_manage> list = DAO.getAllBooked();
         if (list != null) {
-            request.setAttribute("dataRoom", list);
-            request.getRequestDispatcher("roomManageAdmin.jsp").forward(request, response);
+            List<Reservation> listre = new ArrayList<>();
+            List<Customer> listCus = new ArrayList<>();
+            CustomerDAO CustomerDAO = new CustomerDAO();
+            ServiceDAO serDAO = new ServiceDAO();
+            
+            
+            for (int i = 0; i < list.size(); i++) {
+                listre.add(reservationDAO.GetReservation(list.get(i).getCode()));
+                listCus.add(CustomerDAO.GetCustomer(listre.get(i).getCustomer_ID()));
+            }
+            request.setAttribute("data", listre);
+            request.setAttribute("datacus", listCus);
+            request.getRequestDispatcher("bookedRoom.jsp").forward(request, response);
+
         } else {
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
-        }
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String roomCode = request.getParameter("roomCode");
-        boolean available = request.getParameter("avai_" + roomCode) != null;
-        boolean booked = request.getParameter("booked_" + roomCode) != null;
-        boolean occupied = request.getParameter("occup_" + roomCode) != null;
-        RoomDAO DAO = new RoomDAO();
-
-        if (available) {
-            DAO.UpdateCustomer("Available", roomCode);
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
-        } else if (booked) {
-            DAO.UpdateCustomer("Booked", roomCode);
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
-        } else if (occupied) {
-            DAO.UpdateCustomer("Occupied", roomCode);
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
+            response.sendRedirect(request.getContextPath() + "/readBookedRoom");
         }
 
     }

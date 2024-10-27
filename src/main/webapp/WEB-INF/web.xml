@@ -20,6 +20,57 @@
         <servlet-name>UpdateRoomServlet</servlet-name>
         <servlet-class>Controller.Room.UpdateRoomServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>readServiceServlet</servlet-name>
+        <servlet-class>Controller.Service.readServiceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>updateServiceServlet</servlet-name>
+        <servlet-class>Controller.Service.updateServiceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>createServiceServlet</servlet-name>
+        <servlet-class>Controller.Service.createServiceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>serviceDeleteServlet</servlet-name>
+        <servlet-class>Controller.Service.deleteServiceServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>readBookedRoomServlet</servlet-name>
+        <servlet-class>Controller.Room.readBookedRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>readOccupiedRoom</servlet-name>
+        <servlet-class>Controller.Room.readOccupiedRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>readAvailableRoom</servlet-name>
+        <servlet-class>Controller.Room.readAvailableRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>updatePriceRoom</servlet-name>
+        <servlet-class>Controller.Room.updatePriceRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>readPriceRoom</servlet-name>
+        <servlet-class>Controller.Room.readPriceRoom</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>readBookedHasService</servlet-name>
+        <servlet-class>Controller.Room.readBookedHasService</servlet-class>
+    </servlet>
+    <servlet>
+    <servlet-name>createServiceServlet</servlet-name>
+    <servlet-class>Controller.Service.createServiceServlet</servlet-class>
+    <multipart-config>
+        <location>/tmp</location> 
+        <max-file-size>10485760</max-file-size> 
+        <max-request-size>52428800</max-request-size> 
+        <file-size-threshold>5242880</file-size-threshold> 
+    </multipart-config>
+</servlet>
+
     <servlet-mapping>
         <servlet-name>LoginControllerServlet</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -39,6 +90,46 @@
     <servlet-mapping>
         <servlet-name>UpdateRoomServlet</servlet-name>
         <url-pattern>/UpdateRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>readServiceServlet</servlet-name>
+        <url-pattern>/readService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updateServiceServlet</servlet-name>
+        <url-pattern>/updateService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>createServiceServlet</servlet-name>
+        <url-pattern>/createService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>serviceDeleteServlet</servlet-name>
+        <url-pattern>/deleteService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>readBookedRoomServlet</servlet-name>
+        <url-pattern>/readBookedRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>readOccupiedRoom</servlet-name>
+        <url-pattern>/readOccupiedRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>readAvailableRoom</servlet-name>
+        <url-pattern>/readAvailableRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updatePriceRoom</servlet-name>
+        <url-pattern>/updatePriceRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>readPriceRoom</servlet-name>
+        <url-pattern>/readPriceRoom</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>readBookedHasService</servlet-name>
+        <url-pattern>/readBookedHasService</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

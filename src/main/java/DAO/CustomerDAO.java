@@ -23,10 +23,9 @@ public class CustomerDAO extends DBContext {
     public CustomerDAO() {
         super();
     }
-    
-    
+
     public List<Customer> GetAll() {
-        List<Customer> list =  new ArrayList<>();
+        List<Customer> list = new ArrayList<>();
         String query = "Select  *  from Customers";
         try {
             PreparedStatement ps = conn.prepareStatement(query);
@@ -39,7 +38,7 @@ public class CustomerDAO extends DBContext {
                         rs.getString("PhoneNumber"),
                         rs.getString("Email"),
                         rs.getString("Password"),
-                        rs.getDate("Age")
+                        rs.getDate("Birthday")
                 );
                 list.add(cus);
             }
@@ -56,7 +55,7 @@ public class CustomerDAO extends DBContext {
                 + "PhoneNumber,"
                 + "Email,"
                 + "Password"
-                + ",Age) "
+                + ",Birthday) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -97,14 +96,34 @@ public class CustomerDAO extends DBContext {
         }
         return cus;
     }
-
+    public Customer GetCustomer(int id) {
+        Customer cus = new Customer();
+        String query = "select * from Customers where Customer_ID = ?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Age"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return cus;
+    }
     public void UpdateCustomer(Customer cus) {
         String query = "UPDATE Customers SET Customer_Name = ?, "
                 + "Address= ?,"
                 + "PhoneNumber=?,"
                 + "Email=?,"
                 + "Password=?,"
-                + "Age=?"
+                + "Birthday=?"
                 + " WHERE Customer_ID = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -134,13 +153,13 @@ public class CustomerDAO extends DBContext {
     }
 
     public List<Customer> SearchUserByName(String name) {
-         List<Customer> list = new ArrayList<>();
+        List<Customer> list = new ArrayList<>();
         String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? ";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, "%"+name+"%");
+            pstmt.setString(1, "%" + name + "%");
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Customer cus = new Customer();
                 cus.setID(rs.getInt("Customer_ID"));
                 cus.setName(rs.getString("Customer_Name"));
@@ -148,7 +167,7 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getDate("Age"));
+                cus.setAge(rs.getDate("Birthday"));
                 list.add(cus);
             }
         } catch (Exception e) {
@@ -158,14 +177,14 @@ public class CustomerDAO extends DBContext {
     }
 
     public List<Customer> SearchUserByAddress(String Address) {
-         List<Customer> list = new ArrayList<>();
-        
+        List<Customer> list = new ArrayList<>();
+
         String query = "SELECT * FROM Customers WHERE Address LIKE ? ";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, "%"+Address+"%");
+            pstmt.setString(1, "%" + Address + "%");
             ResultSet rs = pstmt.executeQuery();
-                 while(rs.next()) {
+            while (rs.next()) {
                 Customer cus = new Customer();
                 cus.setID(rs.getInt("Customer_ID"));
                 cus.setName(rs.getString("Customer_Name"));
@@ -173,7 +192,7 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getDate("Age"));
+                cus.setAge(rs.getDate("Birthday"));
                 list.add(cus);
             }
         } catch (Exception e) {
@@ -182,15 +201,15 @@ public class CustomerDAO extends DBContext {
         return list;
     }
 
-    public List<Customer> SearchUserByAge(int Age) {
-         List<Customer> list = new ArrayList<>();
+    public List<Customer> SearchUserByEmail(String Email) {
+        List<Customer> list = new ArrayList<>();
 
-        String query = "SELECT * FROM Customers WHERE Age = ?";
+        String query = "SELECT * FROM Customers WHERE Email LIKE ? ";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setInt(1, Age);
+            pstmt.setString(1, "%" + Email + "%");
             ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
+            while (rs.next()) {
                 Customer cus = new Customer();
                 cus.setID(rs.getInt("Customer_ID"));
                 cus.setName(rs.getString("Customer_Name"));
@@ -198,7 +217,32 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getDate("Age"));
+                cus.setAge(rs.getDate("Birthday"));
+                list.add(cus);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return list;
+    }
+
+    public List<Customer> SearchUserByAge(String email) {
+        List<Customer> list = new ArrayList<>();
+
+        String query = "SELECT * FROM Customers WHERE Email  LIKE ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, "%" + email + "%");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Customer cus = new Customer();
+                cus.setID(rs.getInt("Customer_ID"));
+                cus.setName(rs.getString("Customer_Name"));
+                cus.setAddress(rs.getString("Address"));
+                cus.setPhoneNumber(rs.getString("PhoneNumber"));
+                cus.setEmail(rs.getString("Email"));
+                cus.setPassword(rs.getString("Password"));
+                cus.setAge(rs.getDate("Birthday"));
                 list.add(cus);
             }
         } catch (Exception e) {
@@ -208,15 +252,15 @@ public class CustomerDAO extends DBContext {
     }
 
     public List<Customer> SearchUserByNameAndAddress(String name, String address) {
-         List<Customer> list = new ArrayList<>();
-   
+        List<Customer> list = new ArrayList<>();
+
         String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Address LIKE ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1,"%"+ name+"%");
-            pstmt.setString(2, "%"+address+"%");
+            pstmt.setString(1, "%" + name + "%");
+            pstmt.setString(2, "%" + address + "%");
             ResultSet rs = pstmt.executeQuery();
-                 while(rs.next()) {
+            while (rs.next()) {
                 Customer cus = new Customer();
                 cus.setID(rs.getInt("Customer_ID"));
                 cus.setName(rs.getString("Customer_Name"));
@@ -224,7 +268,7 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getDate("Age"));
+                cus.setAge(rs.getDate("Birthday"));
                 list.add(cus);
             }
         } catch (Exception e) {
@@ -233,16 +277,16 @@ public class CustomerDAO extends DBContext {
         return list;
     }
 
-    public List<Customer>SearchUserByNameAndAge(String name, int age) {
-         List<Customer> list = new ArrayList<>();
-        
-        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Age = ? '";
+    public List<Customer> SearchUserByNameAndAge(String name, String email) {
+        List<Customer> list = new ArrayList<>();
+
+        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Email LIKE ? '";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1,"%"+ name+"%");
-            pstmt.setInt(2, age);
+            pstmt.setString(1, "%" + name + "%");
+            pstmt.setString(2, "%" + email + "%");
             ResultSet rs = pstmt.executeQuery();
-          while(rs.next()) {
+            while (rs.next()) {
                 Customer cus = new Customer();
                 cus.setID(rs.getInt("Customer_ID"));
                 cus.setName(rs.getString("Customer_Name"));
@@ -250,7 +294,7 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getDate("Age"));
+                cus.setAge(rs.getDate("Birthday"));
                 list.add(cus);
             }
         } catch (Exception e) {
@@ -259,16 +303,16 @@ public class CustomerDAO extends DBContext {
         return list;
     }
 
-    public List<Customer> SearchUserByAddressAndAge(String address, int age) {
-         List<Customer> list = new ArrayList<>();
-       
-        String query = "SELECT * FROM Customers WHERE Address LIKE ? AND Age = ? '";
+    public List<Customer> SearchUserByAddressAndAge(String address, String email) {
+        List<Customer> list = new ArrayList<>();
+
+        String query = "SELECT * FROM Customers WHERE Address LIKE ? AND Email LIKE  ? '";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1,"%"+ address+"%");
-            pstmt.setInt(2, age);
+            pstmt.setString(1, "%" + address + "%");
+            pstmt.setString(2, "%" + email + "%");
             ResultSet rs = pstmt.executeQuery();
-                  while(rs.next()) {
+            while (rs.next()) {
                 Customer cus = new Customer();
                 cus.setID(rs.getInt("Customer_ID"));
                 cus.setName(rs.getString("Customer_Name"));
@@ -276,7 +320,7 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getDate("Age"));
+                cus.setAge(rs.getDate("Birthday"));
                 list.add(cus);
             }
         } catch (Exception e) {
@@ -285,17 +329,17 @@ public class CustomerDAO extends DBContext {
         return list;
     }
 
-    public List<Customer> SearchUser(String name, String address, int age) {
-         List<Customer> list = new ArrayList<>();
-       
-        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Address LIKE ? AND Age = ? '";
+    public List<Customer> SearchUser(String name, String address, String email) {
+        List<Customer> list = new ArrayList<>();
+
+        String query = "SELECT * FROM Customers WHERE Customer_Name LIKE ? AND Address LIKE ? AND Email LIKE ? '";
         try {
             PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, "%"+name+"%");
-            pstmt.setString(2,"%"+ address+"%");
-            pstmt.setInt(3, age);
+            pstmt.setString(1, "%" + name + "%");
+            pstmt.setString(2, "%" + address + "%");
+            pstmt.setString(3, "%" + email + "%");
             ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
+            while (rs.next()) {
                 Customer cus = new Customer();
                 cus.setID(rs.getInt("Customer_ID"));
                 cus.setName(rs.getString("Customer_Name"));
@@ -303,7 +347,7 @@ public class CustomerDAO extends DBContext {
                 cus.setPhoneNumber(rs.getString("PhoneNumber"));
                 cus.setEmail(rs.getString("Email"));
                 cus.setPassword(rs.getString("Password"));
-                cus.setAge(rs.getDate("Age"));
+                cus.setAge(rs.getDate("Birthday"));
                 list.add(cus);
             }
         } catch (Exception e) {

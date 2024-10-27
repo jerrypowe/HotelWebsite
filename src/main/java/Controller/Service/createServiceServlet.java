@@ -2,25 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.Room;
+package Controller.Service;
 
-import DAO.RoomDAO;
-import Model.Room_manage;
+import DAO.ServiceDAO;
+import Model.Service;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.HashMap;
+import jakarta.servlet.http.Part;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author HP
  */
-public class RoomManageServlet extends HttpServlet {
+public class createServiceServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +38,10 @@ public class RoomManageServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RoomManageServlet</title>");
+            out.println("<title>Servlet createServiceServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RoomManageServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet createServiceServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,13 +59,14 @@ public class RoomManageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RoomDAO DAO = new RoomDAO();
-        List<Room_manage> list = DAO.GetAll();
-        if (list != null) {
-            request.setAttribute("dataRoom", list);
-            request.getRequestDispatcher("roomManageAdmin.jsp").forward(request, response);
+        ServiceDAO DAO = new ServiceDAO();
+        List<Service> list = DAO.GetAll();
+        int id = list.size() + 1;
+        if (!list.isEmpty()) {
+            request.setAttribute("data", id);
+            request.getRequestDispatcher("createservice.jsp").forward(request, response);
         } else {
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
+            response.sendRedirect(request.getContextPath() + "/createService");
         }
     }
 
@@ -81,23 +81,48 @@ public class RoomManageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String roomCode = request.getParameter("roomCode");
-        boolean available = request.getParameter("avai_" + roomCode) != null;
-        boolean booked = request.getParameter("booked_" + roomCode) != null;
-        boolean occupied = request.getParameter("occup_" + roomCode) != null;
-        RoomDAO DAO = new RoomDAO();
-
-        if (available) {
-            DAO.UpdateCustomer("Available", roomCode);
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
-        } else if (booked) {
-            DAO.UpdateCustomer("Booked", roomCode);
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
-        } else if (occupied) {
-            DAO.UpdateCustomer("Occupied", roomCode);
-            response.sendRedirect(request.getContextPath() + "/RoomManageServlet");
+        String service_id = request.getParameter("id");
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        String service_price = request.getParameter("price");
+        String Image = "img/service/" + request.getParameter("images");
+        if (!service_id.isEmpty() && !name.isEmpty()) {
+            ServiceDAO DAO = new ServiceDAO();
+            int id = Integer.parseInt(service_id);
+            int price = Integer.parseInt(service_price);
+            boolean result = DAO.Add(
+                    new Service(id, name, description, price, Image)
+            );
+            if (result) {
+                response.sendRedirect(request.getContextPath() + "/readService");
+            } else {
+            }
         }
-
+//  String service_id = request.getParameter("id");
+//    String name = request.getParameter("name");
+//    String description = request.getParameter("description");
+//    String service_price = request.getParameter("price");
+//
+//    // Xử lý tệp hình ảnh
+//    Part imagePart = request.getPart("images");
+//    String imageFileName = imagePart.getSubmittedFileName();
+//    String imagePath = "img/service/" + imageFileName;
+//
+//    if (service_id != null && !service_id.isEmpty() && name != null && !name.isEmpty()) {
+//        ServiceDAO DAO = new ServiceDAO();
+//        int id = Integer.parseInt(service_id);
+//        int price = Integer.parseInt(service_price);
+//
+//        // Lưu tệp hình ảnh vào thư mục
+//        imagePart.write(imagePath); // Lưu tệp vào đường dẫn đã chỉ định
+//
+//        boolean result = DAO.Add(new Service(id, name, description, price, imagePath));
+//        if (result) {
+//            response.sendRedirect(request.getContextPath() + "/readService");
+//        } else {
+//            // Xử lý lỗi
+//        }
+//    }
     }
 
     /**

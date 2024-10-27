@@ -88,8 +88,8 @@ public class UpdateRoomServlet extends HttpServlet {
 //        boolean occupied = request.getParameter("occup_") != null;
         String roomStatus = request.getParameter("RoomStatus");
         RoomDAO DAO = new RoomDAO();
-        if (roomStatus!=null) {
-        
+        if (roomStatus != null) {
+
             switch (roomStatus) {
                 case "available":
                     DAO.UpdateCustomer("Available", roomCode);
@@ -106,7 +106,7 @@ public class UpdateRoomServlet extends HttpServlet {
                 default:
                     break;
             }
-}
+        }
     }
 
     /**

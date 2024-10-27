@@ -13,11 +13,11 @@
         <title>JSP Page</title>
         <script>
             function checkOnlyOne(selectedCheckbox) {
-                // Lấy tất cả các checkbox
+               
                 var checkboxes = document.querySelectorAll('input[type="checkbox"]');
                 checkboxes.forEach((checkbox) => {
                     if (checkbox !== selectedCheckbox) {
-                        checkbox.checked = false; // Bỏ chọn tất cả checkbox khác
+                        checkbox.checked = false;
                     }
                 });
             }

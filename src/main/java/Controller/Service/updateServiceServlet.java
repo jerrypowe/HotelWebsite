@@ -2,24 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.User;
+package Controller.Service;
 
-import DAO.CustomerDAO;
-import Model.Customer;
+import DAO.ServiceDAO;
+import Model.Service;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author HP
  */
-public class SearchControllerServlet extends HttpServlet {
+public class updateServiceServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +36,10 @@ public class SearchControllerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchControllerServlet</title>");
+            out.println("<title>Servlet updateServiceServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchControllerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet updateServiceServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,8 +57,16 @@ public class SearchControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        response.sendRedirect("search.jsp");
+        String ser_id = request.getParameter("service_id");
+        ServiceDAO DAO = new ServiceDAO();
+
+        Service ser = DAO.Get(Integer.parseInt(ser_id));
+        if (!Service.isEmpty(ser)) {
+            request.setAttribute("data", ser);
+            request.getRequestDispatcher("updateService.jsp").forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/updateService");
+        }
     }
 
     /**
@@ -74,39 +80,21 @@ public class SearchControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String Serviceid = request.getParameter("id");
         String name = request.getParameter("name");
-        String address = request.getParameter("address");
-        String age = request.getParameter("age");
-        List<Customer> list = new ArrayList<>();
-        CustomerDAO DAO = new CustomerDAO();
-        if (!name.isEmpty() && !address.isEmpty() && !age.isEmpty()) {
-            int iage = Integer.parseInt(age);
-            list = DAO.SearchUser(name, address, iage);
-        } else if (!name.isEmpty() && !address.isEmpty() && age.isEmpty()) {
-            list = DAO.SearchUserByNameAndAddress(name, address);
-        } else if (!address.isEmpty() && !age.isEmpty()&&name.isEmpty()) {
-            int iage = Integer.parseInt(age);
-            list = DAO.SearchUserByAddressAndAge(address, iage);
-        } else if (address.isEmpty() && !age.isEmpty()&&!name.isEmpty()) {
-            int iage = Integer.parseInt(age);
-            list = DAO.SearchUserByNameAndAge(name, iage);
-        } else if (address.isEmpty() && age.isEmpty()&&!name.isEmpty()) {
-            list = DAO.SearchUserByName(name);
-        } else if (!address.isEmpty() && age.isEmpty()&&name.isEmpty()) {
-            list = DAO.SearchUserByAddress(address);
-        } else if (address.isEmpty() && !age.isEmpty()&&name.isEmpty()) {
-            int iage = Integer.parseInt(age);
-            list = DAO.SearchUserByAge(iage);
-        }else{
-        list = DAO.GetAll();
-        }
-       
-
-        if (list != null) {
-            request.setAttribute("data", list);
-            request.getRequestDispatcher("search.jsp").forward(request, response);
+        String description = request.getParameter("description");
+        String Serviceprice = request.getParameter("price");
+        String images;
+        if (!request.getParameter("images").isEmpty()) {
+            images = "img/service/" + request.getParameter("images");
         } else {
-            response.sendRedirect(request.getContextPath() + "/Search");
+            images = request.getParameter("image");
+        }
+        if (!Serviceid.isEmpty() && !name.isEmpty()) {
+            ServiceDAO DAO = new ServiceDAO();
+
+            DAO.Update(new Service(Integer.parseInt(Serviceid), name, description, Integer.parseInt(Serviceprice), images));
+            response.sendRedirect(request.getContextPath() + "/readService");
         }
     }
 

@@ -86,8 +86,9 @@ public class Customer {
     public void setAge(Date Age) {
         this.Age = Age;
     }
+    
        public static boolean isEmpty(Customer cus) {
         return (cus.getID()<0)  &&  cus.getName().isEmpty();
     }
-    
+
 }
